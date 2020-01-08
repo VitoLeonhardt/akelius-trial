@@ -50,6 +50,7 @@ function App() {
   const [nationality, setNationality] = useState(undefined);
   const [dateOfBirth, setDateOfBirth] = useState(undefined);
   const [passExpirationDate, setPassExpirationDate] = useState(undefined);
+  const [submittedData, submitData] = useState(undefined);
 
   const isValidName = (str) => {
     return str && str.length > 0 && str[0] === str[0].toUpperCase();
@@ -79,19 +80,38 @@ function App() {
     && isValueSpecified(country) && isValueSpecified(gender) && isValueSpecified(nationality)
     && isDoBValid(dateOfBirth) && isPassExpDateValid(passExpirationDate);
   }
+
+  const submit = () => {
+    submitData({
+      name,
+      surname,
+      passport,
+      country,
+      gender,
+      nationality,
+      dateOfBirth,
+      passExpirationDate
+    })
+  }
+
+  if(submittedData) {
+    return (<div>
+      {Object.keys(submittedData).map(key => <div key={key}><span className="key">{key}: </span><span>{submittedData[key]}</span></div>)}
+    </div>)
+  }
   return (
-    <div>
+    <div className="basicForm">
       <Input placeholder="Name" value={name} onChange={(_, { value }) => setName(value)}/>
       <Input placeholder="Surname" value={surname} onChange={(_, { value }) => setSurname(value)}/>
       <Input placeholder="eg. 234234" value={passport} onChange={(_, { value }) => setPassport(value)}/>
-      <Dropdown value={country} selection options={countryOptions} onChange={(_, { value }) => setCountry(value)}/>
+      <Dropdown placeholder="Issuer" value={country} selection options={countryOptions} onChange={(_, { value }) => setCountry(value)}/>
       <Radio label="Male" checked={gender === "M"} onClick={() => setGender("M")}/>
       <Radio label="Female" checked={gender === "F"} onClick={() => setGender("F")}/>
       <Radio label="Not specified" checked={gender === "N"} onClick={() => setGender("N")}/>
-      <Dropdown value={nationality} selection options={nationalityOptions} onChange={(_, { value }) => setNationality(value)}/>
+      <Dropdown placeholder="Nationality" value={nationality} selection options={nationalityOptions} onChange={(_, { value }) => setNationality(value)}/>
       <DateInput dateFormat="YYYY-MM-DD" value={dateOfBirth} onChange={(_, { value }) => setDateOfBirth(value)} placeholder="Date of Birth"/>
       <DateInput dateFormat="YYYY-MM-DD" value={passExpirationDate} onChange={(_, { value }) => setPassExpirationDate(value)} placeholder="Passport expiration date"/>
-      <Button disabled={!isFormValid()}>Submit</Button>
+      <Button disabled={!isFormValid()} onClick={() => submit()}>Submit</Button>
     </div>
   );
 }
