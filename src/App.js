@@ -59,6 +59,10 @@ function App() {
     return !!val;
   }
 
+  const isPassNumberValid = (passNumber) => {
+    return isValueSpecified(passNumber) && /^(\d|C|F|G|H|J|K|L|M|P|R|T|V|W|X|Y|Z){9}$/.test(passNumber);
+  }
+
   const isDoBValid = (date) => {
     if(!moment(date).isValid()) return false;
     const eighteenYearsAgo = moment().subtract(18, "years");
@@ -71,8 +75,8 @@ function App() {
   };
 
   const isFormValid = () => {
-    return isValidName(name) && isValidName(surname) && 
-    isValueSpecified(country) && isValueSpecified(gender) && isValueSpecified(nationality)
+    return isValidName(name) && isValidName(surname) && isPassNumberValid(passport) 
+    && isValueSpecified(country) && isValueSpecified(gender) && isValueSpecified(nationality)
     && isDoBValid(dateOfBirth) && isPassExpDateValid(passExpirationDate);
   }
   return (
